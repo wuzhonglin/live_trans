@@ -22,6 +22,7 @@ BLACKLIST_PHRASES = [
     "請不吝點贊訂閱轉發打賞支持明鏡與點點欄目",
     "字幕由 Amara.org 社群提供",
     "请不吝点赞 订阅 转发 打赏支持明镜与点点栏目",
+    "准确地抄写，不添加任何额外的短语。",
     # 他の不要なフレーズをここに追加
 ]
 
@@ -80,14 +81,14 @@ def translate_text(text, target_language="日本語"):
         return None
 
 
-def process_audio(audio_file_path):
+def process_audio(audio_file_path, target_language="zh"):
     # 音声認識
     transcribed_text = transcribe_audio(audio_file_path)
     if not transcribed_text:
         return None, None
 
     # 翻訳
-    translated_text = translate_text(transcribed_text, target_language="zh")
+    translated_text = translate_text(transcribed_text, target_language)
 
     return transcribed_text, translated_text
 
@@ -103,13 +104,14 @@ def recognize_worker():
 
         # 音声セグメントを一時ファイルとして保存
         audio_file_path = create_audio_file(audio_data)
+        target_language = 'zh'
 
         # 音声認識と翻訳
-        original_text, translated_text = process_audio(audio_file_path)
+        original_text, translated_text = process_audio(audio_file_path,target_language)
 
         if original_text and translated_text:
             print(f"原文 (英語): {original_text}")
-            print(f"翻訳後 (日本語): {translated_text}")
+            print(f"翻訳後 ({target_language}): {translated_text}")
         else:
             print("音声認識または翻訳に失敗しました。")
 
